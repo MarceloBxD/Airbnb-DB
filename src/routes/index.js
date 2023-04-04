@@ -5,7 +5,7 @@ const Auth = require("../middlewares/auth");
 
 router.post("/register", ApiController.register);
 
-router.get("/login", ApiController.login);
+router.post("/login", ApiController.login);
 
 router.get("/list", Auth.private, ApiController.list);
 

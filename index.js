@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const router = require("./src/routes");
 const sequelize = require("./src/database/mysql");
 
+const saltRounds = 10;
+
 dotenv.config();
 
 app.use(express.json());
