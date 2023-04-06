@@ -21,10 +21,6 @@ const Users = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    course: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
   },
   {
     tableName: "users",

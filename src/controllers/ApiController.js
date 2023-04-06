@@ -31,7 +31,7 @@ const login = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json("pass ok! Loggin Success");
+          res.cookie("token", token).json(user);
         }
       );
     } else {
@@ -45,7 +45,7 @@ const login = async (req, res) => {
 // Controller de Registro
 
 const register = async (req, res) => {
-  const { name, email, password, course } = req.body;
+  const { name, email, password } = req.body;
   try {
     const userExists = await Users.findOne({ where: { email } });
 
@@ -56,7 +56,6 @@ const register = async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        course,
       });
 
       const token = jwt.sign(
@@ -108,9 +107,14 @@ const list = async (req, res) => {
   }
 };
 
+const getprofile = async (req, res) => {
+  res.json("user info").cookie("token", "token");
+};
+
 module.exports = {
   register,
   login,
   list,
   fluxograma,
+  getprofile,
 };

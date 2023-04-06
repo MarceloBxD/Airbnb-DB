@@ -4,11 +4,11 @@ const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const router = require("./src/routes");
 const sequelize = require("./src/database/mysql");
-
-const saltRounds = 10;
+const cors = require("cors");
 
 dotenv.config();
 
+app.use(cors());
 app.use(express.json());
 
 // Usar o body-parser para pegar os dados do formulário
