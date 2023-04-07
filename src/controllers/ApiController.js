@@ -31,7 +31,7 @@ const login = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json("Login Succesful");
+          res.cookie("token", token).json(user);
         }
       );
     } else {
