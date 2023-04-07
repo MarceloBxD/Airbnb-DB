@@ -20,7 +20,7 @@ const login = async (req, res) => {
 
   if (user) {
     const passOk = bcrypt.compareSync(password, user.password);
-    console.log(password, user.password);
+    // console.log(password, user.password);
     if (passOk) {
       jwt.sign(
         {
@@ -31,7 +31,7 @@ const login = async (req, res) => {
         {},
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(user);
+          res.cookie("token", token).json("Login Succesful");
         }
       );
     } else {
@@ -77,26 +77,6 @@ const register = async (req, res) => {
   }
 };
 
-// Controller de Fluxograma de cada curso
-
-const fluxograma = async (req, res) => {
-  const { course } = req.params;
-
-  let fluxograma = [];
-
-  if (course == "eng-comp") {
-    fluxograma = fluxogramaComp;
-  } else if (course == "eng-mec") {
-    fluxograma = [];
-  }
-
-  try {
-    res.status(200).json({ fluxograma });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 // Controller para listar os usuários (só é possivel se o usuário estiver logado, com um token sendo passado no header )
 const list = async (req, res) => {
   try {
@@ -108,13 +88,12 @@ const list = async (req, res) => {
 };
 
 const getprofile = async (req, res) => {
-  res.json("user info").cookie("token", "token");
+  return res.json("user info");
 };
 
 module.exports = {
   register,
   login,
   list,
-  fluxograma,
   getprofile,
 };

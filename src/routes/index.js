@@ -9,8 +9,6 @@ router.post("/login", ApiController.login);
 
 router.get("/list", Auth.private, ApiController.list);
 
-router.get("/:course/fluxograma", ApiController.fluxograma);
-
 router.get("/profile", ApiController.getprofile);
 
 module.exports = router;
