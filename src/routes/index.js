@@ -21,4 +21,6 @@ router.get("/ordem-menor-preco", ApiController.ordemMenorPreco);
 
 router.get("/ordem-maior-preco", ApiController.ordemMaiorPreco);
 
+router.post("/place", ApiController.place);
+
 module.exports = router;

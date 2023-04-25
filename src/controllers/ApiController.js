@@ -173,6 +173,23 @@ const ordemMaiorPreco = async (req, res) => {
   }
 };
 
+const place = async (req, res) => {
+  const { name } = req.body;
+
+  if (!name)
+    return res.status(400).json({ message: "Preencha o campo de pesquisa!" });
+
+  try {
+    const place = await Places.findAll({ where: { name } });
+
+    if (place) {
+      res.status(200).json({ place });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   login,
   register,
@@ -183,4 +200,5 @@ module.exports = {
   ordemAlfabetica,
   ordemMenorPreco,
   ordemMaiorPreco,
+  place,
 };
