@@ -1,7 +1,9 @@
-const Users = require("../models/models");
+// Modals
+const Users = require("../models/User");
+const Places = require("../models/Place");
+
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const fluxogramaComp = require("../dataCourse/engComp");
 
 // Criptografia de senha
 const bcrypt = require("bcrypt");
@@ -20,7 +22,6 @@ const login = async (req, res) => {
 
   if (user) {
     const passOk = bcrypt.compareSync(password, user.password);
-    // console.log(password, user.password);
     if (passOk) {
       jwt.sign(
         {
@@ -28,10 +29,14 @@ const login = async (req, res) => {
           id: user.id,
         },
         process.env.SECRET_KEY,
-        {},
+        { expiresIn: "24h" },
         (err, token) => {
           if (err) throw err;
-          res.cookie("token", token).json(user);
+          else {
+            res.cookie("token", token).json(user);
+          }
+
+          // quando der reload, o token nao sai
         }
       );
     } else {
@@ -40,12 +45,14 @@ const login = async (req, res) => {
   } else {
     res.status(422).json("User not found");
   }
-};
-
-// Controller de Registro
+}; // Login
 
 const register = async (req, res) => {
   const { name, email, password } = req.body;
+
+  if (!name || !email || !password)
+    return res.status(400).json({ message: "Preencha todos os campos" });
+
   try {
     const userExists = await Users.findOne({ where: { email } });
 
@@ -65,7 +72,7 @@ const register = async (req, res) => {
         },
         process.env.SECRET_KEY,
         {
-          expiresIn: "2h",
+          expiresIn: "24h",
         }
       );
       res.status(200).json({ user, token });
@@ -75,7 +82,7 @@ const register = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
-};
+}; // Register
 
 // Controller para listar os usuários (só é possivel se o usuário estiver logado, com um token sendo passado no header )
 const list = async (req, res) => {
@@ -86,14 +93,94 @@ const list = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+// List
 
-const getprofile = async (req, res) => {
-  return res.json("user info");
+const places = async (req, res) => {
+  try {
+    const places = await Places.findAll();
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const details = async (req, res) => {
+  try {
+    const places = await Places.findByPk(req.params.id);
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const registerPlace = async (req, res) => {
+  const { name, address, category, price, description } = req.body;
+
+  if (!name || !address || !category || !price || !description)
+    return res.status(400).json({ message: "Preencha todos os campos" });
+
+  try {
+    const placeExists = await Places.findOne({ where: { name } });
+
+    if (!placeExists) {
+      const place = await Places.create({
+        name,
+        address,
+        category,
+        price,
+        description,
+      });
+
+      res.status(200).json({ place });
+    } else {
+      res.status(400).json({ message: "Place already exists" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const ordemAlfabetica = async (req, res) => {
+  try {
+    const places = await Places.findAll({
+      order: [["name", "ASC"]],
+    });
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const ordemMenorPreco = async (req, res) => {
+  try {
+    const places = await Places.findAll({
+      order: [["price", "ASC"]],
+    });
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const ordemMaiorPreco = async (req, res) => {
+  try {
+    const places = await Places.findAll({
+      order: [["price", "DESC"]],
+    });
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 module.exports = {
-  register,
   login,
+  register,
   list,
-  getprofile,
+  places,
+  details,
+  registerPlace,
+  ordemAlfabetica,
+  ordemMenorPreco,
+  ordemMaiorPreco,
 };
