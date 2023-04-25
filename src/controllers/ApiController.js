@@ -1,7 +1,7 @@
 // Modals
 const Users = require("../models/User");
 const Places = require("../models/Place");
-
+const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
@@ -180,10 +180,24 @@ const place = async (req, res) => {
     return res.status(400).json({ message: "Preencha o campo de pesquisa!" });
 
   try {
-    const place = await Places.findAll({ where: { name } });
+    const places = await Places.findAll({
+      where: {
+        [Op.or]: [
+          {
+            name: { [Op.like]: `%${name}%` },
+          },
+          {
+            description: { [Op.like]: `%${name}%` },
+          },
+          {
+            category: { [Op.like]: `%${name}%` },
+          },
+        ],
+      },
+    });
 
-    if (place) {
-      res.status(200).json({ place });
+    if (places) {
+      res.status(200).json({ places });
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
