@@ -4,6 +4,7 @@ const Places = require("../models/Place");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const download = require("image-downloader");
 
 // Criptografia de senha
 const bcrypt = require("bcrypt");
@@ -180,7 +181,7 @@ const place = async (req, res) => {
     return res.status(400).json({ message: "Preencha o campo de pesquisa!" });
 
   try {
-    const places = await Places.findAll({
+    const place = await Places.findAll({
       where: {
         [Op.or]: [
           {
@@ -196,12 +197,30 @@ const place = async (req, res) => {
       },
     });
 
-    if (places) {
-      res.status(200).json({ places });
+    if (place) {
+      res.status(200).json({ place });
     }
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+};
+const uploadByLink = async (req, res) => {
+  const { link } = req.body;
+  const newName = "photo" + Date.now() + ".jpg";
+
+  const options = {
+    url: link,
+    dest: __dirname + "../../uploads" + newName,
+  };
+
+  await download
+    .image(options)
+    .then(({ filename }) => {
+      console.log("Saved to", filename);
+    })
+    .catch((err) => console.error(err));
+
+  res.json(newName);
 };
 
 module.exports = {
@@ -215,4 +234,5 @@ module.exports = {
   ordemMenorPreco,
   ordemMaiorPreco,
   place,
+  uploadByLink,
 };
