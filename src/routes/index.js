@@ -1,26 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const ApiController = require("../controllers/ApiController");
+const AuthController = require("../controllers/AuthController");
+const PlaceController = require("../controllers/PlaceController");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 
-router.post("/register", ApiController.register);
+router.post("/register", AuthController.register);
 
-router.post("/login", ApiController.login);
+router.post("/login", AuthController.login);
 
 router.get("/places", ApiController.places);
 
 router.get("/details/:id", ApiController.details);
 
-router.post("/register-place", ApiController.registerPlace);
+router.post("/register-place", PlaceController.registerPlace);
 
-router.get("/ordem-alfabetica", ApiController.ordemAlfabetica);
+router.get("/ordem-alfabetica", PlaceController.ordemAlfabetica);
 
-router.get("/ordem-menor-preco", ApiController.ordemMenorPreco);
+router.get("/ordem-menor-preco", PlaceController.ordemMenorPreco);
 
-router.get("/ordem-maior-preco", ApiController.ordemMaiorPreco);
+router.get("/ordem-maior-preco", PlaceController.ordemMaiorPreco);
 
-router.post("/place", ApiController.place);
+router.post("/place", PlaceController.place);
 
 router.post("/upload-by-link", ApiController.uploadByLink);
 
