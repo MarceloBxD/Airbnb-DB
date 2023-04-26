@@ -115,9 +115,9 @@ const details = async (req, res) => {
 };
 
 const registerPlace = async (req, res) => {
-  const { name, address, category, price, description } = req.body;
+  const { name, address, category, price, description, images } = req.body;
 
-  if (!name || !address || !category || !price || !description)
+  if (!name || !address || !category || !price || !description || !images)
     return res.status(400).json({ message: "Preencha todos os campos" });
 
   try {
@@ -130,6 +130,7 @@ const registerPlace = async (req, res) => {
         category,
         price,
         description,
+        images,
       });
 
       res.status(200).json({ place });
@@ -204,7 +205,7 @@ const place = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-console.log(__dirname);
+
 const uploadByLink = async (req, res) => {
   const { link } = req.body;
   const newName = "photo" + Date.now() + ".jpg";

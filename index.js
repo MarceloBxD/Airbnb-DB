@@ -10,6 +10,7 @@ dotenv.config();
 
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(__dirname + "/uploads"));
 
 // Usar o body-parser para pegar os dados do formulário
 app.use(router);
