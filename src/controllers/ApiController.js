@@ -204,13 +204,14 @@ const place = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+console.log(__dirname);
 const uploadByLink = async (req, res) => {
   const { link } = req.body;
   const newName = "photo" + Date.now() + ".jpg";
 
   const options = {
     url: link,
-    dest: __dirname + "../../uploads" + newName,
+    dest: "../../uploads/" + newName,
   };
 
   await download
