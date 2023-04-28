@@ -75,7 +75,13 @@ const register = async (req, res) => {
   }
 }; // Register
 
+const profile = async (req, res) => {
+  const { token } = req.cookies;
+  res.json({ token });
+};
+
 module.exports = {
   login,
   register,
+  profile,
 };

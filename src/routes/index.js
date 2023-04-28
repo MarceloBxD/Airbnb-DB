@@ -4,7 +4,7 @@ const ApiController = require("../controllers/ApiController");
 const AuthController = require("../controllers/AuthController");
 const PlaceController = require("../controllers/PlaceController");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+// const upload = multer({ dest: "uploads/" });
 
 router.post("/register", AuthController.register);
 
@@ -25,5 +25,7 @@ router.get("/ordem-maior-preco", PlaceController.ordemMaiorPreco);
 router.post("/place", PlaceController.place);
 
 router.post("/upload-by-link", ApiController.uploadByLink);
+
+router.get("/profile", AuthController.profile);
 
 module.exports = router;

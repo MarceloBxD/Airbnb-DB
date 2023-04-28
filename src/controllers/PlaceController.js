@@ -1,4 +1,5 @@
 const { Op } = require("sequelize");
+const Places = require("../models/Place.js");
 
 const registerPlace = async (req, res) => {
   const { name, address, category, price, description, image } = req.body;

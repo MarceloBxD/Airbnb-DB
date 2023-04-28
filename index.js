@@ -5,12 +5,19 @@ const bodyParser = require("body-parser");
 const router = require("./src/routes");
 const sequelize = require("./src/database/mysql");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 dotenv.config();
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+  })
+);
 app.use(express.json());
-app.use('/uploads', express.static(__dirname + "/uploads"));
+app.use(cookieParser());
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 // Usar o body-parser para pegar os dados do formulário
 app.use(router);
