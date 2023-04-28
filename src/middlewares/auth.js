@@ -1,4 +1,3 @@
-const Users = require("../models/User");
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
 
@@ -7,7 +6,7 @@ dotenv.config();
 const Auth = {
   private: async (req, res, next) => {
     let success = false;
-
+    console.log(req);
     if (req.headers.authorization) {
       const [authType, token] = req.headers.authorization.split(" ");
 

@@ -24,6 +24,7 @@ const login = async (req, res) => {
         (err, token) => {
           if (err) throw err;
           else {
+            res.set("authorization", "Bearer " + token);
             res.cookie("token", token).json(user);
           }
 

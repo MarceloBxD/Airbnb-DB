@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Places = require("../models/Place.js");
 
 const registerPlace = async (req, res) => {
-  const { name, address, category, price, description, image } = req.body;
+  const { name, address, category, price, description, image } = req.body.data;
 
   if (!name || !address || !category || !price || !description)
     return res.status(400).json({ message: "Preencha todos os campos" });

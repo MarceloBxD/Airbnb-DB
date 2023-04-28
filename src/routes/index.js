@@ -3,6 +3,7 @@ const router = express.Router();
 const ApiController = require("../controllers/ApiController");
 const AuthController = require("../controllers/AuthController");
 const PlaceController = require("../controllers/PlaceController");
+const Auth = require("../middlewares/auth");
 const multer = require("multer");
 // const upload = multer({ dest: "uploads/" });
 
@@ -14,7 +15,7 @@ router.get("/places", ApiController.places);
 
 router.get("/details/:id", ApiController.details);
 
-router.post("/register-place", PlaceController.registerPlace);
+router.post("/register-place", Auth.private, PlaceController.registerPlace);
 
 router.get("/ordem-alfabetica", PlaceController.ordemAlfabetica);
 
