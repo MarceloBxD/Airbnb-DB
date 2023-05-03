@@ -6,27 +6,24 @@ const PlaceController = require("../controllers/PlaceController");
 const Auth = require("../middlewares/auth");
 const multer = require("multer");
 // const upload = multer({ dest: "uploads/" });
+const photosMiddleware = multer({ dest: "uploads/" });
 
 router.post("/register", AuthController.register);
 
 router.post("/login", AuthController.login);
 
-router.get("/places", ApiController.places);
+router.post(
+  "/uploads",
+  photosMiddleware.single("photos"),
+  PlaceController.uploads
+);
 
-router.get("/details/:id", ApiController.details);
-
-router.post("/register-place", Auth.private, PlaceController.registerPlace);
-
-router.get("/ordem-alfabetica", PlaceController.ordemAlfabetica);
-
-router.get("/ordem-menor-preco", PlaceController.ordemMenorPreco);
-
-router.get("/ordem-maior-preco", PlaceController.ordemMaiorPreco);
-
-router.post("/place", PlaceController.place);
+router.post("/register-place", PlaceController.registerPlace);
 
 router.post("/upload-by-link", ApiController.uploadByLink);
 
 router.get("/profile", AuthController.profile);
+
+router.get("/places", PlaceController.places);
 
 module.exports = router;

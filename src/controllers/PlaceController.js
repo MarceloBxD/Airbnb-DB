@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const Places = require("../models/Place.js");
 
 const registerPlace = async (req, res) => {
-  const { name, address, category, price, description, image } = req.body.data;
+  const { name, address, category, price, description, image } = req.body;
 
   if (!name || !address || !category || !price || !description)
     return res.status(400).json({ message: "Preencha todos os campos" });
@@ -62,6 +62,15 @@ const ordemMaiorPreco = async (req, res) => {
   }
 };
 
+const places = async (req, res) => {
+  try {
+    const places = await Places.find({});
+    res.status(200).json(places);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 const place = async (req, res) => {
   const { name } = req.body;
 
@@ -93,10 +102,16 @@ const place = async (req, res) => {
   }
 };
 
+const uploads = async (req, res) => {
+  res.json(req.files);
+};
+
 module.exports = {
   registerPlace,
   ordemAlfabetica,
   ordemMenorPreco,
   ordemMaiorPreco,
   place,
+  uploads,
+  places,
 };

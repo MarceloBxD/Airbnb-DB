@@ -1,15 +1,10 @@
 const bcrypt = require("bcrypt");
-const Users = require("../models/User");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-
-  const user = await Users.findOne({
-    where: {
-      email,
-    },
-  });
+  const user = await User.findOne({ email });
 
   if (user) {
     const passOk = bcrypt.compareSync(password, user.password);
@@ -17,7 +12,7 @@ const login = async (req, res) => {
       jwt.sign(
         {
           email: user.email,
-          id: user.id,
+          id: user._id,
         },
         process.env.SECRET_KEY,
         { expiresIn: "24h" },
@@ -46,12 +41,12 @@ const register = async (req, res) => {
     return res.status(400).json({ message: "Preencha todos os campos" });
 
   try {
-    const userExists = await Users.findOne({ where: { email } });
+    const userExists = await User.findOne({ where: { email } });
 
     if (!userExists) {
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const user = await Users.create({
+      const user = await User.create({
         name,
         email,
         password: hashedPassword,

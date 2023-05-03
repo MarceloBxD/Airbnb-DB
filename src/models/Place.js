@@ -1,43 +1,18 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database/mysql");
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const Places = sequelize.define(
-  "Places",
-  {
-    placeid: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+const LocalSchema = new Schema({
+  placeid: {
+    type: Schema.Types.ObjectId,
   },
-  {
-    tableName: "places",
-    timestamps: false,
-  }
-);
+  name: String,
+  address: String,
+  category: String,
+  price: Number,
+  description: String,
+  image: [String],
+});
 
-module.exports = Places;
+const PlaceModal = mongoose.model("Place", LocalSchema);
+
+module.exports = PlaceModal;

@@ -1,5 +1,5 @@
 // Modals
-const Users = require("../models/User");
+const User = require("../models/User");
 const Places = require("../models/Place");
 const dotenv = require("dotenv");
 const download = require("image-downloader");
@@ -11,7 +11,7 @@ dotenv.config();
 // Controller para listar os usuários (só é possivel se o usuário estiver logado, com um token sendo passado no header )
 const list = async (req, res) => {
   try {
-    const users = await Users.findAll();
+    const users = await User.findAll();
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
