@@ -6,7 +6,6 @@ dotenv.config();
 const Auth = {
   private: async (req, res, next) => {
     let success = false;
-    console.log(req);
     if (req.headers.authorization) {
       const [authType, token] = req.headers.authorization.split(" ");
 

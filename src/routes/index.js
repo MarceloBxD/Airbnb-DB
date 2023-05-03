@@ -20,6 +20,14 @@ router.post(
 
 router.post("/register-place", PlaceController.registerPlace);
 
+router.post("/place", PlaceController.place);
+
+router.get("/ordem-alfabetica", PlaceController.ordemAlfabetica);
+
+router.get("/ordem-menor-preco", PlaceController.ordemMenorPreco);
+
+router.get("/ordem-maior-preco", PlaceController.ordemMaiorPreco);
+
 router.post("/upload-by-link", ApiController.uploadByLink);
 
 router.get("/profile", AuthController.profile);

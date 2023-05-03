@@ -1,4 +1,3 @@
-const { Op } = require("sequelize");
 const Places = require("../models/Place.js");
 
 const registerPlace = async (req, res) => {
@@ -8,7 +7,7 @@ const registerPlace = async (req, res) => {
     return res.status(400).json({ message: "Preencha todos os campos" });
 
   try {
-    const placeExists = await Places.findOne({ where: { name } });
+    const placeExists = await Places.findOne({ name });
 
     if (!placeExists) {
       const place = await Places.create({
@@ -31,9 +30,7 @@ const registerPlace = async (req, res) => {
 
 const ordemAlfabetica = async (req, res) => {
   try {
-    const places = await Places.findAll({
-      order: [["name", "ASC"]],
-    });
+    const places = await Places.find({}).sort({ name: 1 });
     res.status(200).json(places);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -42,9 +39,9 @@ const ordemAlfabetica = async (req, res) => {
 
 const ordemMenorPreco = async (req, res) => {
   try {
-    const places = await Places.findAll({
-      order: [["price", "ASC"]],
-    });
+    const places = await Places.find({
+      // ordenar por menores preços
+    }).sort({ price: 1 });
     res.status(200).json(places);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -53,9 +50,7 @@ const ordemMenorPreco = async (req, res) => {
 
 const ordemMaiorPreco = async (req, res) => {
   try {
-    const places = await Places.findAll({
-      order: [["price", "DESC"]],
-    });
+    const places = await Places.find({}).sort({ price: -1 });
     res.status(200).json(places);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -78,20 +73,9 @@ const place = async (req, res) => {
     return res.status(400).json({ message: "Preencha o campo de pesquisa!" });
 
   try {
-    const place = await Places.findAll({
-      where: {
-        [Op.or]: [
-          {
-            name: { [Op.like]: `%${name}%` },
-          },
-          {
-            description: { [Op.like]: `%${name}%` },
-          },
-          {
-            category: { [Op.like]: `%${name}%` },
-          },
-        ],
-      },
+    const place = await Places.find({
+      // procurar por lugares parecidos com o que foi digitado
+      name: { $regex: name, $options: "i" },
     });
 
     if (place) {

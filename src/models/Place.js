@@ -2,9 +2,6 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const LocalSchema = new Schema({
-  placeid: {
-    type: Schema.Types.ObjectId,
-  },
   name: String,
   address: String,
   category: String,
@@ -13,6 +10,6 @@ const LocalSchema = new Schema({
   image: [String],
 });
 
-const PlaceModal = mongoose.model("Place", LocalSchema);
+const PlaceModal = mongoose.model("Places", LocalSchema);
 
 module.exports = PlaceModal;

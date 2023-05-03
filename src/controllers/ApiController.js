@@ -11,7 +11,7 @@ dotenv.config();
 // Controller para listar os usuários (só é possivel se o usuário estiver logado, com um token sendo passado no header )
 const list = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.find();
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -21,7 +21,7 @@ const list = async (req, res) => {
 
 const places = async (req, res) => {
   try {
-    const places = await Places.findAll();
+    const places = await Places.find();
     res.status(200).json(places);
   } catch (err) {
     res.status(500).json({ message: err.message });
