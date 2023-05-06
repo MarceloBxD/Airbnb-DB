@@ -5,25 +5,21 @@ const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-
   if (user) {
     const passOk = bcrypt.compareSync(password, user.password);
     if (passOk) {
       jwt.sign(
         {
+          name: user.name,
           email: user.email,
           id: user._id,
         },
         process.env.SECRET_KEY,
-        { expiresIn: "24h" },
+        {},
         (err, token) => {
           if (err) throw err;
-          else {
-            res.set("authorization", "Bearer " + token);
-            res.cookie("token", token).json(user);
-          }
-
-          // quando der reload, o token nao sai
+          res.cookie("token", token, { httpOnly: true }).status(200).json(user);
+          console.log(token);
         }
       );
     } else {
@@ -73,7 +69,14 @@ const register = async (req, res) => {
 
 const profile = async (req, res) => {
   const { token } = req.cookies;
-  res.json({ token });
+  if (token) {
+    jwt.verify(token, process.env.SECRET_KEY, {}, async (err, decoded) => {
+      if (err) throw err;
+      res.json(decoded);
+    });
+  } else {
+    res.json(null);
+  }
 };
 
 module.exports = {
