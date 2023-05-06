@@ -72,7 +72,8 @@ const profile = async (req, res) => {
   if (token) {
     jwt.verify(token, process.env.SECRET_KEY, {}, async (err, decoded) => {
       if (err) throw err;
-      res.json(decoded);
+      const { name, email, _id } = await User.findById(decoded.id);
+      res.status(200).json({ name, email, _id });
     });
   } else {
     res.json(null);
